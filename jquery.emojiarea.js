@@ -92,7 +92,7 @@
 					range.deleteContents();
 					range.insertNode(document.createTextNode(' '));
 					range.insertNode(node);
-					range.setStart(node);
+					range.setStart(node, 0);
 					
 					window.setTimeout(function() {
 						range = document.createRange();
