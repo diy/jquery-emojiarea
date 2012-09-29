@@ -90,7 +90,10 @@
 				if (sel.getRangeAt && sel.rangeCount) {
 					range = sel.getRangeAt(0);
 					range.deleteContents();
+					range.insertNode(document.createTextNode(' '));
 					range.insertNode(node);
+					range.setStart(node);
+					
 					window.setTimeout(function() {
 						range = document.createRange();
 						range.setStartAfter(node);
@@ -113,6 +116,7 @@
 	})();
 	
 	util.insertAtCursor = function(text, el) {
+		text = ' ' + text;
 		var val = el.value, endIndex, startIndex, range;
 		if (typeof el.selectionStart != 'undefined' && typeof el.selectionEnd != 'undefined') {
 			startIndex = el.selectionStart;
