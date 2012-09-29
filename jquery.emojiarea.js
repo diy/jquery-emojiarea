@@ -188,7 +188,7 @@
 		if (path.length && path.charAt(path.length - 1) !== '/') {
 			path += '/';
 		}
-		return '<img src="' + path + filename + '" alt="' + util.htmlEntities(emoji) + '">';
+		return '<img src="' + path + filename + '" alt="' + util.htmlEntities(emoji) + '" contenteditable="false">';
 	};
 	
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
