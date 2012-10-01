@@ -26,11 +26,15 @@
 	
 	$.emojiarea = {
 		path: '',
-		icons: {}
+		icons: {},
+		defaults: {
+			button: null,
+			buttonLabel: 'Emojis'
+		}
 	};
 	
 	$.fn.emojiarea = function(options) {
-		options = options || {};
+		options = $.extend({}, $.emojiarea.defaults, options);
 		return this.each(function() {
 			var $textarea = $(this);
 			if ('contentEditable' in document.body && options.wysiwyg !== false) {
@@ -166,12 +170,17 @@
 	
 	EmojiArea.prototype.setupButton = function() {
 		var self = this;
-		var label = this.options.label || 'Emojis';
-		var $button = $('<a href="javascript:void(0)">');
+		var $button;
 		
-		$button.html(label);
-		$button.addClass('emoji-button');
-		$button.attr({title: label});
+		if (!this.options.button || typeof this.options.button !== 'object') {
+			$button = $('<a href="javascript:void(0)">');
+			$button.html(this.options.buttonLabel);
+			$button.addClass('emoji-button');
+			$button.attr({title: this.options.buttonLabel});
+			this.$editor.before($button);
+		} else {
+			$button = $(this.options.button);
+		}
 		
 		$button.on('click', function(e) {
 			EmojiMenu.show(self);
@@ -179,7 +188,6 @@
 		});
 		
 		this.$button = $button;
-		this.$editor.before($button);
 	};
 	
 	EmojiArea.createIcon = function(emoji) {
