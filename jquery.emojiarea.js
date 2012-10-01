@@ -188,7 +188,7 @@
 		if (path.length && path.charAt(path.length - 1) !== '/') {
 			path += '/';
 		}
-		return '<img src="' + path + filename + '" alt="' + util.htmlEntities(emoji) + '" contenteditable="false">';
+		return '<img src="' + path + filename + '" alt="' + util.htmlEntities(emoji) + '">';
 	};
 	
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -239,6 +239,8 @@
 		this.$editor.text($textarea.val());
 		this.$editor.attr({contenteditable: 'true'});
 		this.$editor.on('blur keyup paste', function() { return self.onChange.apply(self, arguments); });
+		this.$editor.on('mousedown focus', function() { document.execCommand('enableObjectResizing', false, false); });
+		this.$editor.on('blur', function() { document.execCommand('enableObjectResizing', true, true); });
 		
 		var html = this.$editor.text();
 		var emojis = $.emojiarea.icons;
@@ -267,6 +269,10 @@
 	EmojiArea_WYSIWYG.prototype.insert = function(emoji) {
 		var content;
 		var $img = $(EmojiArea.createIcon(emoji));
+		if ($img[0].attachEvent) {
+			$img[0].attachEvent('onresizestart', function(e) { e.returnValue = false; }, false);
+		}
+		
 		util.replaceSelection($img[0]);
 		
 		this.$editor.trigger('focus');
