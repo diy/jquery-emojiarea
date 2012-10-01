@@ -29,7 +29,8 @@
 		icons: {},
 		defaults: {
 			button: null,
-			buttonLabel: 'Emojis'
+			buttonLabel: 'Emojis',
+			buttonPosition: 'after'
 		}
 	};
 	
@@ -177,7 +178,7 @@
 			$button.html(this.options.buttonLabel);
 			$button.addClass('emoji-button');
 			$button.attr({title: this.options.buttonLabel});
-			this.$editor.before($button);
+			this.$editor[this.options.buttonPosition]($button);
 		} else {
 			$button = $(this.options.button);
 		}
@@ -281,13 +282,11 @@
 			$img[0].attachEvent('onresizestart', function(e) { e.returnValue = false; }, false);
 		}
 		
-		util.replaceSelection($img[0]);
-		
 		this.$editor.trigger('focus');
 		if (this.selection) {
 			util.restoreSelection(this.selection);
 		}
-		try { util.replaceSelection(content); } catch (e) {}
+		try { util.replaceSelection($img[0]); } catch (e) {}
 		this.onChange();
 	};
 	
@@ -355,6 +354,7 @@
 		this.$menu = $('<div>');
 		this.$menu.addClass('emoji-menu');
 		this.$menu.hide();
+		this.$items = $('<div>').appendTo(this.$menu);
 		
 		$('body').append(this.$menu);
 		
@@ -404,14 +404,14 @@
 			}
 		}
 		
-		this.$menu.html(html.join(''));
+		this.$items.html(html.join(''));
 	};
 	
 	EmojiMenu.prototype.reposition = function() {
 		var $button = this.emojiarea.$button;
 		var offset = $button.offset();
-		offset.top += $button.height();
-		offset.left += Math.round($button.width() / 2);
+		offset.top += $button.outerHeight();
+		offset.left += Math.round($button.outerWidth() / 2);
 		
 		this.$menu.css({
 			top: offset.top,

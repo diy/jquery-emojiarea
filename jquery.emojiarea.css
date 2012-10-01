@@ -9,28 +9,29 @@
 	vertical-align: middle;
 	margin: -3px 0 0 0;
 }
-.emoji-button {
-	position: absolute;
-	z-index: 1;
-	margin-top: 10px;
-	right: 10px;
-}
 .emoji-menu {
-	background: #fff;
 	position: absolute;
-	z-index: 1;
+	z-index: 999;
 	width: 180px;
 	margin-left: -100px;
 	padding: 0;
-	max-height: 200px;
-	overflow: hidden;
-	box-shadow: 0 1px 5px rgba(0,0,0,0.3);
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
+}
+.emoji-menu > div {
+	max-height: 200px;
+	overflow: hidden;
+	background: #fff;
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
 	border-radius: 3px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	-webkit-box-shadow: 0 1px 5px rgba(0,0,0,0.3);
+	-moz-box-shadow: 0 1px 5px rgba(0,0,0,0.3);
+	box-shadow: 0 1px 5px rgba(0,0,0,0.3);
 }
 .emoji-menu img {
 	width: 25px;
