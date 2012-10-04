@@ -15,15 +15,15 @@
  */
 
 (function($, window, document) {
-	
+
 	var ELEMENT_NODE = 1;
 	var TEXT_NODE = 3;
 	var TAGS_BLOCK = ['p', 'div', 'pre', 'form'];
 	var KEY_ESC = 27;
 	var KEY_TAB = 9;
-	
+
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	
+
 	$.emojiarea = {
 		path: '',
 		icons: {},
@@ -33,7 +33,7 @@
 			buttonPosition: 'after'
 		}
 	};
-	
+
 	$.fn.emojiarea = function(options) {
 		options = $.extend({}, $.emojiarea.defaults, options);
 		return this.each(function() {
@@ -47,9 +47,9 @@
 	};
 
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	
+
 	var util = {};
-	
+
 	util.restoreSelection = (function() {
 		if (window.getSelection) {
 			return function(savedSelection) {
@@ -67,7 +67,7 @@
 			};
 		}
 	})();
-	
+
 	util.saveSelection = (function() {
 		if (window.getSelection) {
 			return function() {
@@ -86,7 +86,7 @@
 			};
 		}
 	})();
-	
+
 	util.replaceSelection = (function() {
 		if (window.getSelection) {
 			return function(content) {
@@ -119,7 +119,7 @@
 			}
 		}
 	})();
-	
+
 	util.insertAtCursor = function(text, el) {
 		text = ' ' + text;
 		var val = el.value, endIndex, startIndex, range;
@@ -135,7 +135,7 @@
 			range.select();
 		}
 	};
-	
+
 	util.extend = function(a, b) {
 		if (typeof a === 'undefined' || !a) { a = {}; }
 		if (typeof b === 'object') {
@@ -147,19 +147,19 @@
 		}
 		return a;
 	};
-	
+
 	util.escapeRegex = function(str) {
 		return (str + '').replace(/([.?*+^$[\]\\(){}|-])/g, '\\$1');
 	};
-	
+
 	util.htmlEntities = function(str) {
 		return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 	};
-	
+
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	
+
 	var EmojiArea = function() {};
-	
+
 	EmojiArea.prototype.setup = function() {
 		var self = this;
 		
@@ -168,11 +168,11 @@
 		
 		this.setupButton();
 	};
-	
+
 	EmojiArea.prototype.setupButton = function() {
 		var self = this;
 		var $button;
-		
+
 		if (!this.options.button || typeof this.options.button !== 'object') {
 			$button = $('<a href="javascript:void(0)">');
 			$button.html(this.options.buttonLabel);
@@ -182,7 +182,7 @@
 		} else {
 			$button = $(this.options.button);
 		}
-		
+
 		$button.on('click', function(e) {
 			EmojiMenu.show(self);
 			e.stopPropagation();
@@ -190,7 +190,7 @@
 		
 		this.$button = $button;
 	};
-	
+
 	EmojiArea.createIcon = function(emoji) {
 		var filename = $.emojiarea.icons[emoji];
 		var path = $.emojiarea.path || '';
@@ -199,9 +199,9 @@
 		}
 		return '<img src="' + path + filename + '" alt="' + util.htmlEntities(emoji) + '">';
 	};
-	
+
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	
+
 	/**
 	 * Editor (plain-text)
 	 * 
@@ -209,26 +209,26 @@
 	 * @param {object} $textarea
 	 * @param {object} options
 	 */
-	
+
 	var EmojiArea_Plain = function($textarea, options) {
 		this.options = options;
 		this.$textarea = $textarea;
 		this.$editor = $textarea;
 		this.setup();
 	};
-	
+
 	EmojiArea_Plain.prototype.insert = function(emoji) {
 		if (!$.emojiarea.icons.hasOwnProperty(emoji)) return;
 		util.insertAtCursor(emoji, this.$textarea[0]);
 		this.$textarea.trigger('change');
 	};
-	
+
 	EmojiArea_Plain.prototype.val = function() {
 		return this.$textarea.val();
 	};
-	
+
 	util.extend(EmojiArea_Plain.prototype, EmojiArea.prototype);
-	
+
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 	/**
@@ -238,10 +238,10 @@
 	 * @param {object} $textarea
 	 * @param {object} options
 	 */
-	
+
 	var EmojiArea_WYSIWYG = function($textarea, options) {
 		var self = this;
-		
+
 		this.options = options;
 		this.$textarea = $textarea;
 		this.$editor = $('<div>').addClass('emoji-wysiwyg-editor');
@@ -250,7 +250,7 @@
 		this.$editor.on('blur keyup paste', function() { return self.onChange.apply(self, arguments); });
 		this.$editor.on('mousedown focus', function() { document.execCommand('enableObjectResizing', false, false); });
 		this.$editor.on('blur', function() { document.execCommand('enableObjectResizing', true, true); });
-		
+
 		var html = this.$editor.text();
 		var emojis = $.emojiarea.icons;
 		for (var key in emojis) {
@@ -259,22 +259,22 @@
 			}
 		}
 		this.$editor.html(html);
-		
+
 		$textarea.hide().after(this.$editor);
-		
+
 		this.setup();
-		
+
 		this.$button.on('mousedown', function() {
 			if (self.hasFocus) {
 				self.selection = util.saveSelection();
 			}
 		});
 	};
-	
+
 	EmojiArea_WYSIWYG.prototype.onChange = function() {
 		this.$textarea.val(this.val()).trigger('change');
 	};
-	
+
 	EmojiArea_WYSIWYG.prototype.insert = function(emoji) {
 		var content;
 		var $img = $(EmojiArea.createIcon(emoji));
@@ -289,25 +289,25 @@
 		try { util.replaceSelection($img[0]); } catch (e) {}
 		this.onChange();
 	};
-	
+
 	EmojiArea_WYSIWYG.prototype.val = function() {
 		var lines = [];
 		var line  = [];
-		
+
 		var flush = function() {
 			lines.push(line.join(''));
 			line = [];
 		};
-		
+
 		var sanitizeNode = function(node) {
 			if (node.nodeType === TEXT_NODE) {
 				line.push(node.nodeValue);
 			} else if (node.nodeType === ELEMENT_NODE) {
 				var tagName = node.tagName.toLowerCase();
 				var isBlock = TAGS_BLOCK.indexOf(tagName) !== -1;
-				
+
 				if (isBlock && line.length) flush();
-				
+
 				if (tagName === 'img') {
 					var alt = node.getAttribute('alt') || '';
 					if (alt) line.push(alt);
@@ -315,28 +315,28 @@
 				} else if (tagName === 'br') {
 					flush();
 				}
-				
+
 				var children = node.childNodes;
 				for (var i = 0; i < children.length; i++) {
 					sanitizeNode(children[i]);
 				}
-				
+
 				if (isBlock && line.length) flush();
 			}
 		};
-		
+
 		var children = this.$editor[0].childNodes;
 		for (var i = 0; i < children.length; i++) {
 			sanitizeNode(children[i]);
 		}
-		
+
 		if (line.length) flush();
-		
+
 		return lines.join('\n');
 	};
-	
+
 	util.extend(EmojiArea_WYSIWYG.prototype, EmojiArea.prototype);
-	
+
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 	/**
@@ -347,31 +347,37 @@
 	 */
 	var EmojiMenu = function() {
 		var self = this;
+		var $body = $(document.body);
 		var $window = $(window);
-		
+
 		this.visible = false;
 		this.emojiarea = null;
 		this.$menu = $('<div>');
 		this.$menu.addClass('emoji-menu');
 		this.$menu.hide();
 		this.$items = $('<div>').appendTo(this.$menu);
-		
-		$('body').append(this.$menu);
-		
-		$window.on('keydown', function(e) {
+
+		$body.append(this.$menu);
+
+		$body.on('keydown', function(e) {
 			if (e.keyCode === KEY_ESC || e.keyCode === KEY_TAB) {
 				self.hide();
 			}
 		});
-		
+
+		$body.on('mouseup', function() {
+			self.hide();
+		});
+
 		$window.on('resize', function() {
 			if (self.visible) self.reposition();
 		});
-		
-		$window.on('click', function() {
-			self.hide();
+
+		this.$menu.on('mouseup', 'a', function(e) {
+			e.stopPropagation();
+			return false;
 		});
-		
+
 		this.$menu.on('click', 'a', function(e) {
 			var emoji = $('.label', $(this)).text();
 			window.setTimeout(function() {
@@ -380,15 +386,15 @@
 			e.stopPropagation();
 			return false;
 		});
-		
+
 		this.load();
 	};
-	
+
 	EmojiMenu.prototype.onItemSelected = function(emoji) {
 		this.emojiarea.insert(emoji);
 		this.hide();
 	};
-	
+
 	EmojiMenu.prototype.load = function() {
 		var html = [];
 		var options = $.emojiarea.icons;
@@ -396,17 +402,17 @@
 		if (path.length && path.charAt(path.length - 1) !== '/') {
 			path += '/';
 		}
-		
+
 		for (var key in options) {
 			if (options.hasOwnProperty(key)) {
 				var filename = options[key];
 				html.push('<a href="javascript:void" title="' + util.htmlEntities(key) + '">' + EmojiArea.createIcon(key) + '<span class="label">' + util.htmlEntities(key) + '</span></a>');
 			}
 		}
-		
+
 		this.$items.html(html.join(''));
 	};
-	
+
 	EmojiMenu.prototype.reposition = function() {
 		var $button = this.emojiarea.$button;
 		var offset = $button.offset();
@@ -418,7 +424,7 @@
 			left: offset.left
 		});
 	};
-	
+
 	EmojiMenu.prototype.hide = function(callback) {
 		if (this.emojiarea) {
 			this.emojiarea.menu = null;
@@ -428,7 +434,7 @@
 		this.visible = false;
 		this.$menu.hide();
 	};
-	
+
 	EmojiMenu.prototype.show = function(emojiarea) {
 		if (this.emojiarea && this.emojiarea === emojiarea) return;
 		this.emojiarea = emojiarea;
@@ -438,7 +444,7 @@
 		this.$menu.show();
 		this.visible = true;
 	};
-	
+
 	EmojiMenu.show = (function() {
 		var menu = null;
 		return function(emojiarea) {
