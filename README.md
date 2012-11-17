@@ -9,7 +9,9 @@ A small **6kb** [jQuery](http://jquery.com/) plugin for turning regular textarea
 <script type="text/javascript">$('textarea').emojiarea();</script>
 ```
 
-### Configuring the Dropdown Menu
+## Configuration
+
+### Dropdown Menu
 
 ![Dropdown Screenshot](http://i.imgur.com/8KPAu.png)
 
@@ -36,7 +38,7 @@ $('textarea').emojiarea({button: '#your-button'});
 
 For customizing the visual appearance, see the [CSS / Skinning](#css--skinning) section.
 
-### Declaring Available Emojis
+### Available Emojis
 
 ```javascript
 $.emojiarea.path = '/path/to/folder/with/icons';
@@ -49,7 +51,7 @@ $.emojiarea.icons = {
 };
 ```
 
-### Setting Defaults
+### Defaults
 
 If you wish to set the defaults for `$().emojiarea()`, extend `$.emojiarea.defaults` like so:
 
