@@ -173,14 +173,16 @@
 		var self = this;
 		var $button;
 
-		if (!this.options.button || typeof this.options.button !== 'object') {
+		if (this.options.button) {
+			$button = $(this.options.button);
+		} else if (this.options.button !== false) {
 			$button = $('<a href="javascript:void(0)">');
 			$button.html(this.options.buttonLabel);
 			$button.addClass('emoji-button');
 			$button.attr({title: this.options.buttonLabel});
 			this.$editor[this.options.buttonPosition]($button);
 		} else {
-			$button = $(this.options.button);
+			$button = $('');
 		}
 
 		$button.on('click', function(e) {
