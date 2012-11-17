@@ -1,11 +1,11 @@
-# jQuery EmojiArea
+# .emojiarea()
 
-A drop-in plugin for turning regular textareas into ones that support emojis, WYSIWYG style! Set up a list of available emojis, call `$('textarea').emojiarea()` and you're done... basically. There's a plain-text fallback, so if the browser doesn't support [contentEditable](http://caniuse.com/#search=contenteditable), it will degrade gracefully—the user will still be able to use the dropdown menu of emojis.
+A small **6kb** [jQuery](http://jquery.com/) plugin for turning regular textareas into ones that support emojis, WYSIWYG style! Set up a list of available emojis, call `$('textarea').emojiarea()` and you're done (basically). There's a plain-text fallback, so if the browser doesn't support [contentEditable](http://caniuse.com/#search=contenteditable), it will degrade gracefully—the user will still be able to use the dropdown menu of emojis.
 
 ![Screenshot](http://i.imgur.com/C4Z8F.gif)
 
 ```html
-<textarea>Get off my lawn :angry:</textarea>
+<textarea>Hello :smile:</textarea>
 <script type="text/javascript">$('textarea').emojiarea();</script>
 ```
 
@@ -34,7 +34,7 @@ Alternatively, if you wish to use your own button:
 $('textarea').emojiarea({button: '#your-button'});
 ```
 
-For skinning information, see the [CSS / Skinning](#css--skinning) section.
+For customizing the visual appearance, see the [CSS / Skinning](#css--skinning) section.
 
 ### Declaring Available Emojis
 
@@ -59,9 +59,9 @@ $.extend($.emojiarea.defaults, {
 });
 ```
 
-For a basic set of emojis, see "packs/basic". If you have a really rad set and would like to share, please fork this and submit a pull request!
+For a basic set of emojis, see "packs/basic". 
 
-### CSS / Skinning
+## CSS / Skinning
 
 See [jquery.emojiarea.css](https://github.com/diy/jquery-emojiarea/blob/master/jquery.emojiarea.css) for the few fundamental CSS styles needed for this to work.
 
@@ -73,6 +73,12 @@ Basically, you'll want to adjust the following styles:
 .emoji-wysiwyg-editor img /* the emoji images in the editor */
 ```
 
+## Footnotes
+
+* Huge props to [Tim Down](http://stackoverflow.com/users/96100/tim-down) for the many insightful answers on Stack Overflow having to deal with cross-browser selection handling.
+* If you have a really rad set of emojis and would like to share, please fork this, add them to "packs/", and submit a pull request!
+* For a giant list of emojis (used by Github, Basecamp, et al), see ["Emoji cheat sheet"](http://www.emoji-cheat-sheet.com/).
+
 ## License
 
 Copyright &copy; 2012 DIY Co
@@ -80,11 +86,3 @@ Copyright &copy; 2012 DIY Co
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at: http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
-
----------
-
-### Footnotes
-
-Huge props to [Tim Down](http://stackoverflow.com/users/96100/tim-down), a beast at cross-browser selection handling.
-
-For a giant list of emojis (used by Github, Basecamp, et al), see ["Emoji cheat sheet"](http://www.emoji-cheat-sheet.com/).
